@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="script/jquery-1.9.0.min.js"></script>
+</head>
+<body>
+
+    <!--<form action="webeditor.ashx?type=upload" method="post" enctype="multipart/form-data">-->
+        <p>  <input type="file" id="uplfile" name="uplfile" /></p>
+        <input id="UserInfo" type="text"  value="{'aaa':'bbb'}"/>
+
+        <p><input type="button" value="submit" name="uplfileBtn" id="uplfileBtn"></p>
+    <!--</form>-->
+    <script type="text/javascript">
+
+
+
+        $("#uplfileBtn").click(function () {
+            var files = $("#uplfile").prop('files');
+
+            var data = new FormData();
+            data.append('file', files[0]);  //参数名：file
+            data.append('userinfo', $("#UserInfo").val());  //参数名：file
+            $.ajax({
+                url: "webeditor.ashx?type=upload",
+                type: 'POST',
+                headers: {"Authorization":"asfsdfjlskdjfalksdjf"},
+                data: data,
+                cache: false, //禁止浏览器对该URL的缓存
+                contentType: false,
+                processData: false,
+                success: function () {
+                    //后续操作
+                }
+            });
+        });
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+</body>
+</html>
