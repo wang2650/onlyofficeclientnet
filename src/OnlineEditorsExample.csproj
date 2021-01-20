@@ -99,6 +99,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\System.Web.Helpers.dll" />
     <Content Include="Models\Generated\Database.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Database.cs</LastGenOutput>
@@ -126,11 +127,13 @@
     </Compile>
     <Compile Include="DocumentConverter.cs" />
     <Compile Include="EditConfigTools.cs" />
+    <Compile Include="FileApi.cs" />
     <Compile Include="FileInfoResult.cs" />
     <Compile Include="FileType.cs" />
     <Compile Include="GetFile.ashx.cs">
       <DependentUpon>GetFile.ashx</DependentUpon>
     </Compile>
+    <Compile Include="GetFileById.cs" />
     <Compile Include="JwtManager.cs" />
     <Compile Include="LogOp.cs" />
     <Compile Include="Models\Generated\Database.cs">
@@ -148,6 +151,8 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Security.cs" />
+    <Compile Include="Sign.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="WebEditor.ashx.cs">
       <DependentUpon>WebEditor.ashx</DependentUpon>

@@ -17,8 +17,11 @@ namespace OnlineEditorsExample
 
         public void ProcessRequest(HttpContext context)
         {
+            bool isValidate = true;
+           
 
-          string ip=   Regex.Replace( HttpContext.Current.Request.UserHostAddress, "[^0-9a-zA-Z.=]", "_");
+
+            string ip=   Regex.Replace( HttpContext.Current.Request.UserHostAddress, "[^0-9a-zA-Z.=]", "_");
             if (ip.Length<8)
             {
                 ip = "127.0.0.1";
@@ -29,15 +32,51 @@ namespace OnlineEditorsExample
 
 
             string subIp = ip.Substring(0, 7);
-            bool isValidate = false;
+           
             if (whileIpList.Contains(ip))
             {
+                string sign = context.Request["sign"];
 
+                if (string.IsNullOrEmpty(sign))
+                {
+                    isValidate = false;
+
+                    return;
+                }
+                try
+                {
+
+                
+            
+          
+                    Sign sg = Newtonsoft.Json.JsonConvert.DeserializeObject<Sign>(Security.Decrypt(sign, "wang2650"));
+                    if (sg == null)
+                    {
+                        isValidate = false;
+                        return;
+                    }
+                    else
+                    {
+                        if (sg.dt.AddSeconds(300) < DateTime.UtcNow)
+                        {
+                            isValidate = false;
+                            return;
+                        }
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    isValidate = false;
+                    return;
+                }
             }
             else
             {
-                //  身份验证 下载
 
+          
 
             }
             string fileid=  context.Request["fileid"];

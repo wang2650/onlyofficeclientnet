@@ -139,10 +139,13 @@ namespace OnlineEditorsExample
 
         public static string FileUri(string id)
         {
+            Sign sg = new Sign();
+            sg.dt = DateTime.UtcNow;
+            sg.url = "fileid=" + id;
             var uri = DefaultConfigTools.Host;
             uri.Path = "getfile.ashx";
-            uri.Query = "fileid=" + id;
-            return uri.ToString();
+            uri.Query = "fileid=" + id + "&sign=" + Security.Encrypt(  Newtonsoft.Json.JsonConvert.SerializeObject(sg),"wang2650");
+            return uri.ToString() ;
         }
 
         public static string DocumentType(string fileName)
@@ -240,6 +243,76 @@ namespace OnlineEditorsExample
 
             return result;
         }
+
+        public static OpResult DoUpload( int filetemplateId,string userId, string userName)
+        {
+            OpResult result = new OpResult();
+            FileInfoResult fileInfoResult = new FileInfoResult();
+       
+            string path = DateTime.UtcNow.ToString("yyyyMMdd");
+
+            string fileExtType = "";
+            switch (filetemplateId)
+            {
+                case 1:
+                    fileExtType = ".docx";
+                    break;
+                case 2:
+                    fileExtType = ".xlsx";
+                    break;
+                case 3:
+                    fileExtType = ".pptx";
+                    break;
+
+                default:
+                    break;
+
+            }
+            
+
+    
+            string guidString = Guid.NewGuid().ToString("N");
+            string newFileName = guidString + fileExtType;
+
+            var savedFileName = DefaultConfigTools.StoragePath(newFileName);
+            File.Copy(HttpRuntime.AppDomainAppPath + "app_data/" + filetemplateId+ fileExtType, savedFileName);
+    
+
+            var histDir = DefaultConfigTools.HistoryDir(savedFileName);
+            Directory.CreateDirectory(histDir);
+            File.WriteAllText(Path.Combine(histDir, "createdInfo.json"), new JavaScriptSerializer().Serialize(new Dictionary<string, object> {
+                { "created", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss:ffff") },
+                { "id", userId },
+                { "name", userName }
+            }));
+            fileInfoResult.FileId = guidString;
+            fileInfoResult.CreateDt = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss:ffff");
+            fileInfoResult.UserId = userId;
+            fileInfoResult.UserName = userName;
+            result.Result = fileInfoResult;
+
+            FileInfomation model = new FileInfomation();
+            model.id = guidString;
+            model.appid = 1;
+            model.createtime = DateTime.UtcNow;
+            model.createuserid = userId;
+            model.createusername = userName;
+            model.filepath = path;
+            model.filestate = 0;
+            model.newfilename = newFileName;
+            model.oldfilename = "新文件"+fileExtType;
+            model.updatetime = DateTime.UtcNow;
+            model.updateuserid = userId;
+            model.updateusername = userName;
+            DbClient.InsertFileInfomation(model);
+
+
+
+
+            return result;
+        }
+
+
 
         public static string DoUpload(string fileUri, HttpRequest request)
         {
