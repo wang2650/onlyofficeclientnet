@@ -46,7 +46,7 @@ namespace OnlineEditorsExample
      
         protected void Page_Load(object sender, EventArgs e)
         {
-            var a = 1;
+         
         }
 
      

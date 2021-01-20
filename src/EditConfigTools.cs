@@ -180,6 +180,13 @@ namespace OnlineEditorsExample
             var userId = HttpContext.Current.Request["userId"];
             var userName = HttpContext.Current.Request["userName"];
             string fileId = HttpContext.Current.Request["fileid"];
+
+
+    
+            var canedit = HttpContext.Current.Request["edit"];
+         
+            var canmodifyContentControl = true;
+
             string created = string.Empty;
             string author = string.Empty;
             FileInfomation fileInfomation = DbClient.GetFileInfomation(fileId);
@@ -240,13 +247,19 @@ namespace OnlineEditorsExample
                                 {
                                     "permissions", new Dictionary<string, object>
                                         {
-                                            { "comment", editorsMode != "view" && editorsMode != "fillForms" && editorsMode != "embedded" && editorsMode != "blockcontent"},
+                                            { "comment",canedit},
                                             { "download", true },
-                                            { "edit", canEdit && (editorsMode == "edit" || editorsMode == "filter") || editorsMode == "blockcontent" },
-                                            { "fillForms", editorsMode != "view" && editorsMode != "comment" && editorsMode != "embedded" && editorsMode != "blockcontent" },
-                                            { "modifyFilter", editorsMode != "filter" },
-                                            { "modifyContentControl", editorsMode != "blockcontent" },
-                                            { "review", editorsMode == "edit" || editorsMode == "review" }
+                                            { "edit", canedit },
+                                            { "modifyFilter",canmodifyContentControl },
+                                            { "modifyContentControl", canmodifyContentControl },
+                                            { "review", canedit }
+                                            //{ "comment", editorsMode != "view" && editorsMode != "fillForms" && editorsMode != "embedded" && editorsMode != "blockcontent"},
+                                            //{ "download", true },
+                                            //{ "edit", canEdit && (editorsMode == "edit" || editorsMode == "filter") || editorsMode == "blockcontent" },
+                                            //{ "fillForms", editorsMode != "view" && editorsMode != "comment" && editorsMode != "embedded" && editorsMode != "blockcontent" },
+                                            //{ "modifyFilter", editorsMode != "filter" },
+                                            //{ "modifyContentControl", editorsMode != "blockcontent" },
+                                            //{ "review", editorsMode == "edit" || editorsMode == "review" }
                                         }
                                 }
                             }
