@@ -33,7 +33,12 @@ namespace OnlineEditorsExample
 
         public static  string DocServiceApiUri
         {
-            get { return WebConfigurationManager.AppSettings["files.docservice.url.api"] ?? string.Empty; }
+            get { 
+                
+                return 
+                  GlobalConfig.GetOnlyOfficeServerIp()+ WebConfigurationManager.AppSettings["files.docservice.url.api"] ?? string.Empty;
+            
+            }
         }
 
         public  string DocConfig { get; private set; }
@@ -181,12 +186,22 @@ namespace OnlineEditorsExample
             var userName = HttpContext.Current.Request["userName"];
             string fileId = HttpContext.Current.Request["fileid"];
 
+            bool canedit = false;
 
-    
-            var canedit = HttpContext.Current.Request["edit"];
-         
+            string editstr = HttpContext.Current.Request["canedit"];
+            if (!string.IsNullOrEmpty(editstr))
+            {
+                bool.TryParse(editstr,out canedit);
+            }
+          
             var canmodifyContentControl = true;
+            bool candownload = false;
 
+            var downloadstr = HttpContext.Current.Request["candownload"];
+            if (!string.IsNullOrEmpty(downloadstr))
+            {
+                bool.TryParse(downloadstr, out candownload);
+            }
             string created = string.Empty;
             string author = string.Empty;
             FileInfomation fileInfomation = DbClient.GetFileInfomation(fileId);
@@ -248,10 +263,10 @@ namespace OnlineEditorsExample
                                     "permissions", new Dictionary<string, object>
                                         {
                                             { "comment",canedit},
-                                            { "download", true },
+                                            { "download", candownload },
                                             { "edit", canedit },
-                                            { "modifyFilter",canmodifyContentControl },
-                                            { "modifyContentControl", canmodifyContentControl },
+                                            { "modifyFilter",canedit },
+                                            { "modifyContentControl", canedit },
                                             { "review", canedit }
                                             //{ "comment", editorsMode != "view" && editorsMode != "fillForms" && editorsMode != "embedded" && editorsMode != "blockcontent"},
                                             //{ "download", true },

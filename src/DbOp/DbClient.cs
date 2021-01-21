@@ -18,7 +18,7 @@ namespace OnlineEditorsExample.DbOp
 
         private static string sqlConn = "SqlConnStr";
 
-        public static FileInfomation GetFileInfomation(string Id)
+        public static FileInfomation GetFileInfomation(string Id,int filestate=0)
         {
 
             Database db = new PetaPoco.Database(sqlConn);
@@ -28,7 +28,7 @@ namespace OnlineEditorsExample.DbOp
             }
           
 
-            var lt=  db.Query<FileInfomation>(" select *  from fileinfomation where id='"+Id+"'").ToList();
+            var lt=  db.Query<FileInfomation>(" select *  from fileinfomation where id='"+Id+ "'  and  filestate="+ filestate).ToList();
 
             if (lt != null && lt.Count>0)
             {

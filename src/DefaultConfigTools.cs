@@ -169,7 +169,7 @@ namespace OnlineEditorsExample
 
         }
 
-        protected string UrlPreloadScripts = WebConfigurationManager.AppSettings["files.docservice.url.preloader"];
+        protected string UrlPreloadScripts =GlobalConfig.GetOnlyOfficeServerIp()+ WebConfigurationManager.AppSettings["files.docservice.url.preloader"];
 
         public static OpResult DoUpload(HttpContext context,string userId,string userName)
         {

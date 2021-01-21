@@ -127,13 +127,15 @@
     </Compile>
     <Compile Include="DocumentConverter.cs" />
     <Compile Include="EditConfigTools.cs" />
-    <Compile Include="FileApi.cs" />
     <Compile Include="FileInfoResult.cs" />
+    <Compile Include="FileOp.ashx.cs">
+      <DependentUpon>FileOp.ashx</DependentUpon>
+    </Compile>
     <Compile Include="FileType.cs" />
     <Compile Include="GetFile.ashx.cs">
       <DependentUpon>GetFile.ashx</DependentUpon>
     </Compile>
-    <Compile Include="GetFileById.cs" />
+    <Compile Include="GlobalConfig.cs" />
     <Compile Include="JwtManager.cs" />
     <Compile Include="LogOp.cs" />
     <Compile Include="Models\Generated\Database.cs">
@@ -183,6 +185,10 @@
     <Content Include="GetFile.ashx" />
     <Content Include="Models\Generated\PetaPoco.Generator.ttinclude" />
     <Content Include="Models\Generated\PetaPoco.Core.ttinclude" />
+    <Content Include="FileOp.ashx" />
+    <Content Include="App_Data\1.docx" />
+    <Content Include="App_Data\2.xlsx" />
+    <Content Include="App_Data\3.pptx" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
