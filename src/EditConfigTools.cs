@@ -322,7 +322,7 @@ namespace OnlineEditorsExample
             if (JwtManager.Enabled)
             {
                 var token = JwtManager.Encode(config);
-                config.Add("token", token);
+           config.Add("token", token);
             }
             DocConfig =Newtonsoft.Json.JsonConvert.SerializeObject(config);
            // DocConfig = jss.Serialize(config);

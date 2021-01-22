@@ -84,7 +84,7 @@ namespace OnlineEditorsExample
             get { return (WebConfigurationManager.AppSettings["files.docservice.convert-docs"] ?? "").Split(new char[] { '|', ',' }, StringSplitOptions.RemoveEmptyEntries).ToList(); }
         }
 
-        public  string _fileName;
+
 
 
         public static string StoragePath( string fileid)

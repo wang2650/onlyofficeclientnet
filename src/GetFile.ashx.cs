@@ -50,20 +50,20 @@ namespace OnlineEditorsExample
             
           
                     Sign sg = Newtonsoft.Json.JsonConvert.DeserializeObject<Sign>(Security.Decrypt(sign, "wang2650"));
-                    if (sg == null)
-                    {
-                        isValidate = false;
-                        return;
-                    }
-                    else
-                    {
-                        if (sg.dt.AddSeconds(300) < DateTime.UtcNow)
-                        {
-                            isValidate = false;
-                            return;
-                        }
+                    //if (sg == null)
+                    //{
+                    //    isValidate = false;
+                    //    return;
+                    //}
+                    //else
+                    //{
+                    //    if (sg.dt.AddSeconds(300) < DateTime.UtcNow)
+                    //    {
+                    //        isValidate = false;
+                    //        return;
+                    //    }
 
-                    }
+                    //}
 
                 }
                 catch (Exception ex)

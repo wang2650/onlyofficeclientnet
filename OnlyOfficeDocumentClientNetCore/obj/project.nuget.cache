@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "dgSpecHash": "6vldzdqmM/582oUQ7w39CNlWZiLxkM3eHRtQZLtgIBhZcOnKyzcbPYQVI5LUPI661f4ECVufpEMBTHO7oNoI6w==",
+  "success": true,
+  "projectFilePath": "C:\\myfiles\\githubproject\\onlyofficeclientnet\\OnlyOfficeDocumentClientNetCore\\OnlyOfficeDocumentClientNetCore.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.configuration\\5.0.0\\microsoft.extensions.configuration.5.0.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\sqlsugar\\5.0.2.2\\sqlsugar.5.0.2.2.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'SqlSugar 5.0.2.2' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0'. This package may not be fully compatible with your project.",
+      "libraryId": "SqlSugar",
+      "targetGraphs": [
+        "net5.0"
+      ]
+    }
+  ]
+}
