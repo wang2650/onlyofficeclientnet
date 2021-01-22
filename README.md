@@ -1,7 +1,7 @@
 ﻿# onlyofficeclientnet
-这是一个onlyoffice documentserver 的net framework客户端
+这是一个onlyoffice documentserver 的客户端 ,src下面的为net framework 。另一个文件夹为netcore5版本
 
-#####主要解决了官方示例的c#项目中的问题：
+##### 主要解决了官方示例的c#项目中的问题：
 
 1 现改为目录自定义，以日期区分，同一天上传的文件放到同一文件夹下 （原版 文件默认保存在跟目前下，以ip区分。）
 
