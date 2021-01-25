@@ -13,3 +13,6 @@
 
 5 orm使用了petapoco ，（本来想用sqlsugar，但是sqlsugar只有netcore版本 支持访问postgresql）
 
+文档 https://github.com/wang2650/onlyofficeclientnet/wiki
+
+参考博客 https://www.cnblogs.com/wang2650/
