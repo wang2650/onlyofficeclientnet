@@ -8,6 +8,10 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using OnlyOfficeDocumentClientNetCore.Model;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+
 namespace OnlyOfficeDocumentClientNetCore.Common
 {
     public class Security
@@ -188,5 +192,13 @@ namespace OnlyOfficeDocumentClientNetCore.Common
             StringBuilder ret = new StringBuilder();
             return System.Text.Encoding.Default.GetString(ms.ToArray());
         }
+
+
+
+
+
+
+
+
     }
 }

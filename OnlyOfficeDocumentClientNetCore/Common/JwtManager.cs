@@ -6,6 +6,10 @@ using System.Text;
 using System.Security;
 namespace OnlyOfficeDocumentClientNetCore.Common
 {
+
+    /// <summary>
+    /// 和documentsever 通信时使用。 config的token字段只有加密后，才能被documentsever识别验证。
+    /// </summary>
     public static class JwtManager
     {
         private static readonly string Secret;
