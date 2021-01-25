@@ -27,6 +27,7 @@
         "dependencies": {
           "Microsoft.Extensions.Configuration": "5.0.0",
           "Newtonsoft.Json": "12.0.3",
+          "Npgsql": "5.0.2",
           "SqlSugar": "5.0.2.2",
           "Microsoft.AspNetCore.Antiforgery": "5.0.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "5.0.0.0",
@@ -247,7 +248,7 @@
           "System.Resources.Reader": "5.0.0.0",
           "System.Resources.ResourceManager": "5.0.0.0",
           "System.Resources.Writer": "5.0.0.0",
-          "System.Runtime.CompilerServices.Unsafe": "5.0.0.0",
+          "System.Runtime.CompilerServices.Unsafe.Reference": "5.0.0.0",
           "System.Runtime.CompilerServices.VisualC": "5.0.0.0",
           "System.Runtime": "5.0.0.0",
           "System.Runtime.Extensions": "5.0.0.0",
@@ -342,6 +343,20 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
       },
+      "Npgsql/5.0.2": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "4.6.0"
+        },
+        "runtime": {
+          "lib/net5.0/Npgsql.dll": {
+            "assemblyVersion": "5.0.2.0",
+            "fileVersion": "5.0.2.0"
+          }
+        },
+        "compile": {
+          "lib/net5.0/Npgsql.dll": {}
+        }
+      },
       "SqlSugar/5.0.2.2": {
         "runtime": {
           "lib/SqlSugar.dll": {
@@ -353,6 +368,7 @@
           "lib/SqlSugar.dll": {}
         }
       },
+      "System.Runtime.CompilerServices.Unsafe/4.6.0": {},
       "Microsoft.AspNetCore.Antiforgery/5.0.0.0": {
         "compile": {
           "Microsoft.AspNetCore.Antiforgery.dll": {}
@@ -1667,7 +1683,7 @@
         },
         "compileOnly": true
       },
-      "System.Runtime.CompilerServices.Unsafe/5.0.0.0": {
+      "System.Runtime.CompilerServices.Unsafe.Reference/5.0.0.0": {
         "compile": {
           "System.Runtime.CompilerServices.Unsafe.dll": {}
         },
@@ -2087,12 +2103,26 @@
       "path": "newtonsoft.json/12.0.3",
       "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
     },
+    "Npgsql/5.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bqsG+0t6+c7nfpunu08HkjeRZCI2g8EbXNtWUHsnFlDzjx0zsLkvzfByiHuYo9a74CMKR9RmxRu7HiPGCE/EvQ==",
+      "path": "npgsql/5.0.2",
+      "hashPath": "npgsql.5.0.2.nupkg.sha512"
+    },
     "SqlSugar/5.0.2.2": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-kZ28pSjMY5lWYT26Fe3uNfO89r2LxsVQBn7Hu1xZFVZk+uza4Cv5xp9eSJrTximVGpy6HxMgFcmedus+gMl6UA==",
       "path": "sqlsugar/5.0.2.2",
       "hashPath": "sqlsugar.5.0.2.2.nupkg.sha512"
+    },
+    "System.Runtime.CompilerServices.Unsafe/4.6.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HxozeSlipUK7dAroTYwIcGwKDeOVpQnJlpVaOkBz7CM4TsE5b/tKlQBZecTjh6FzcSbxndYaxxpsBMz+wMJeyw==",
+      "path": "system.runtime.compilerservices.unsafe/4.6.0",
+      "hashPath": "system.runtime.compilerservices.unsafe.4.6.0.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Antiforgery/5.0.0.0": {
       "type": "referenceassembly",
@@ -3189,7 +3219,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "System.Runtime.CompilerServices.Unsafe/5.0.0.0": {
+    "System.Runtime.CompilerServices.Unsafe.Reference/5.0.0.0": {
       "type": "referenceassembly",
       "serviceable": false,
       "sha512": ""

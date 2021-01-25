@@ -16,7 +16,7 @@ namespace OnlyOfficeDocumentClientNetCore.Common
         static JwtManager()
         {
           
-             Secret = (Configuration.GetSection("OnlyOffice"))["files.docservice.secret"];
+             Secret = Common.Appsettings.app(new string[] { "OnlyOffice", "secret" });
              Enabled = !string.IsNullOrEmpty(Secret);
             
         }
@@ -35,7 +35,20 @@ namespace OnlyOfficeDocumentClientNetCore.Common
 
             return string.Format("{0}.{1}.{2}", encHeader, encPayload, hashSum);
         }
+        public static string Encode(object payload)
+        {
+            var header = new Dictionary<string, object>
+                {
+                    { "alg", "HS256" },
+                    { "typ", "JWT" }
+                };
 
+            var encHeader = Base64UrlEncode(Newtonsoft.Json.JsonConvert.SerializeObject(header));
+            var encPayload = Base64UrlEncode(Newtonsoft.Json.JsonConvert.SerializeObject(payload));
+            var hashSum = Base64UrlEncode(CalculateHash(encHeader, encPayload));
+
+            return string.Format("{0}.{1}.{2}", encHeader, encPayload, hashSum);
+        }
         public static string Decode(string token)
         {
             if (!Enabled || string.IsNullOrEmpty(token)) return "";

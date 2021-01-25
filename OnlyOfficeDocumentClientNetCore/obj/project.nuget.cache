@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "6vldzdqmM/582oUQ7w39CNlWZiLxkM3eHRtQZLtgIBhZcOnKyzcbPYQVI5LUPI661f4ECVufpEMBTHO7oNoI6w==",
+  "dgSpecHash": "BAgJB2EU2tzmr14wFyQ3sc1hvxANCbAQYx110Flm9avi1nr5tUit3bTFPBrY8HuM2EHY2W/76SmtJsXMo+PVoA==",
   "success": true,
   "projectFilePath": "C:\\myfiles\\githubproject\\onlyofficeclientnet\\OnlyOfficeDocumentClientNetCore\\OnlyOfficeDocumentClientNetCore.csproj",
   "expectedPackageFiles": [
@@ -8,7 +8,9 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
-    "C:\\Users\\Administrator\\.nuget\\packages\\sqlsugar\\5.0.2.2\\sqlsugar.5.0.2.2.nupkg.sha512"
+    "C:\\Users\\Administrator\\.nuget\\packages\\npgsql\\5.0.2\\npgsql.5.0.2.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\sqlsugar\\5.0.2.2\\sqlsugar.5.0.2.2.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.6.0\\system.runtime.compilerservices.unsafe.4.6.0.nupkg.sha512"
   ],
   "logs": [
     {

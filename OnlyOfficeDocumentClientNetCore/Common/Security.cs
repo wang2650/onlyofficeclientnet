@@ -150,7 +150,7 @@ namespace OnlyOfficeDocumentClientNetCore.Common
         }
 
 
-        public static string Encrypt(string stringToEncrypt, string sKey)
+        public static string Encrypt(string stringToEncrypt, string sKey= "wang2650")
         {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
             byte[] inputByteArray = Encoding.GetEncoding("UTF-8").GetBytes(stringToEncrypt);
@@ -170,7 +170,7 @@ namespace OnlyOfficeDocumentClientNetCore.Common
         }
 
 
-        public static string Decrypt(string stringToDecrypt, string sKey)
+        public static string Decrypt(string stringToDecrypt, string sKey= "wang2650")
         {
             DESCryptoServiceProvider des = new DESCryptoServiceProvider();
             byte[] inputByteArray = new byte[stringToDecrypt.Length / 2];

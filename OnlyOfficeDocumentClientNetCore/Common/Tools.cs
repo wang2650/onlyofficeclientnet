@@ -11,6 +11,11 @@ namespace OnlyOfficeDocumentClientNetCore.Common
     public class Tools
     {
 
+        public static string DefaultPage = "/api/file/Error";
+        public static string EditPage = "/api/file/Edit";
+        public static string GetFileUrl = "/api/file/GetFileByFileId";
+        public static string callbackUrl = "/api/file/CallbackUrl";
+
         public static string VirtualPath = string.Empty;
 
         public static string Secret = string.Empty;
@@ -18,15 +23,21 @@ namespace OnlyOfficeDocumentClientNetCore.Common
         public static long FileSizeMax = 2048000;
         public static string host = "";
         private static string UrlPreloadScripts = string.Empty;
-        public static UriBuilder Host(HttpRequest request)
+
+        public static void  ConfigHost(HttpRequest request)
         {
             {
                 var uri = new UriBuilder(request.Host.ToUriComponent()) { Query = "" };
                 var requestHost = request.Headers["host"];
                 if (!string.IsNullOrEmpty(requestHost))
                     uri = new UriBuilder(uri.Scheme + "://" + requestHost);
+                if (string.IsNullOrEmpty(host))
+                {
+                    host =(uri.Port==443?"https://":"http://" )+ uri.Host+":"+uri.Port;
 
-                return uri;
+
+                }
+              
             }
         }
 
@@ -124,7 +135,7 @@ namespace OnlyOfficeDocumentClientNetCore.Common
             Sign sg = new Sign();
             sg.dt = DateTime.UtcNow;
         
-         return host+"getfile.ashxfileid=" + id + "&sign=" + Security.Encrypt(Newtonsoft.Json.JsonConvert.SerializeObject(sg), "wang2650");
+         return host+ GetFileUrl+ "?fileid="+id+"&sign=" + Security.Encrypt(Newtonsoft.Json.JsonConvert.SerializeObject(sg));
          
         }
 
@@ -161,7 +172,7 @@ namespace OnlyOfficeDocumentClientNetCore.Common
         public static string CallbackUrl(string fileid)
         {
 
-       return    host + "webeditor.ashx?type=track&fileid=" + System.Web.HttpUtility.UrlEncode(fileid);
+       return    host + callbackUrl + "?type=track&fileid=" + System.Web.HttpUtility.UrlEncode(fileid);
        
 
         }

@@ -13,12 +13,68 @@ using OnlyOfficeDocumentClientNetCore.Op;
 using OnlyOfficeDocumentClientNetCore.Common;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
+using Microsoft.AspNetCore.Mvc;
 namespace OnlyOfficeDocumentClientNetCore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FileController : Controller
+    public class  FileController : Controller
     {
+
+
+        [HttpGet]
+        [Route("DisplayPageConfig")]
+        public JsonResult DisplayPageConfig()
+        {
+
+
+            OpResult result = new OpResult();
+            string fileId = "53259a15dbb44deda722dd96dc774d87";
+            string userId = "1";
+            string userName = "songyan";
+            bool canEdit = true;
+            bool canDownLoad = true;
+            string sign = "sign";
+            OnlyOfficeDocumentClientNetCore.Common.Tools.ConfigHost(this.Request);
+
+            var cfg=  ConfigOp.GetDisplayPageConfig(fileId,userId,userName,canEdit,canDownLoad,sign);
+            result= cfg;
+
+
+
+
+            return Json(result);
+
+
+        }
+        [HttpPost]
+        [Route("CallbackUrl")]
+        public JsonResult CallbackUrl()
+        {
+            OpResult result = new OpResult();
+            return Json(result);
+
+        }
+
+
+
+
+        [HttpGet]
+        [Route("Error")]
+        public JsonResult Error()
+        {
+            OpResult result = new OpResult();
+            return Json(result);
+        }
+
+        [HttpGet]
+        [Route("Edit")]
+        public JsonResult Edit()
+        {
+            OpResult result = new OpResult();
+            return Json(result);
+        }
+
 
         [HttpGet]
         [Route("DownloadFileByFileId")]
@@ -28,7 +84,7 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
 
             var rs=  ConfigOp.GetOne(fileId);
             string directoryPath = rs.filepath;
-            string filePath =Tools.VirtualPath+"/"+ directoryPath + rs.newfilename;
+            string filePath = Tools.VirtualPath + "/" + directoryPath + "/" + rs.newfilename;
             var memoryStream = new MemoryStream();
             using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 65536, FileOptions.Asynchronous | FileOptions.SequentialScan))
             {
@@ -40,7 +96,32 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
      
 
         }
+        [HttpGet]
+        [Route("GetFileByFileId")]
+        public async Task<IActionResult> GetFileByFileId(string fileId)
+        {
+            OpResult result = new OpResult();
 
+            if (fileId.Contains("."))
+            {
+                fileId = fileId.Substring(0, fileId.IndexOf("."));
+
+            }
+
+            var rs = ConfigOp.GetOne(fileId);
+            string directoryPath = rs.filepath;
+            string filePath = Tools.VirtualPath + "/" + directoryPath + "/" + rs.newfilename;
+            var memoryStream = new MemoryStream();
+            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 65536, FileOptions.Asynchronous | FileOptions.SequentialScan))
+            {
+                await stream.CopyToAsync(memoryStream);
+            }
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            return File(memoryStream, "application/octet-stream", rs.oldfilename);
+
+
+        }
         [HttpGet]
         [Route("GetFileHistoryByFileId")]
         public JsonResult GetFileHistoryByFileId([FromQuery] int userId)

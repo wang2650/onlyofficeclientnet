@@ -50,6 +50,10 @@
               "target": "Package",
               "version": "[12.0.3, )"
             },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
             "SqlSugar": {
               "target": "Package",
               "version": "[5.0.2.2, )"
@@ -73,7 +77,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,15 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OnlyOfficeDocumentClientNetCore.Model;
+using OnlyOfficeDocumentClientNetCore.Op;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace OnlyOfficeDocumentClientNetCore.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController :  Controller
     {
 
     
@@ -30,8 +33,7 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
         public IEnumerable<WeatherForecast> Get()
         {
            
-            var a= Common.Tools.Host(this.Request);
-            var b = a;
+    
             Op.ConfigOp configOp = new Op.ConfigOp();
        
             var rng = new Random();
@@ -43,5 +45,37 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
             })
             .ToArray();
         }
+
+
+
+
+        [HttpGet]
+        [Route("GetDisplayPageConfig")]
+        public JsonResult GetDisplayPageConfig()
+        {
+
+
+            OpResult result = new OpResult();
+            string fileId = "53259a15dbb44deda722dd96dc774d87";
+            string userId = "1";
+            string userName = "songyan";
+            bool canEdit = true;
+            bool canDownLoad = true;
+            string sign = "sign";
+
+
+            var cfg = ConfigOp.GetDisplayPageConfig(fileId, userId, userName, canEdit, canDownLoad, sign);
+            result.Result = cfg;
+
+
+
+
+            return Json(result);
+
+
+        }
+
+
+
     }
 }

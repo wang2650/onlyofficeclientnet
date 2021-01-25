@@ -24,3 +24,4 @@ C:\myfiles\githubproject\onlyofficeclientnet\OnlyOfficeDocumentClientNetCore\obj
 C:\myfiles\githubproject\onlyofficeclientnet\OnlyOfficeDocumentClientNetCore\obj\Debug\net5.0\OnlyOfficeDocumentClientNetCore.pdb
 C:\myfiles\githubproject\onlyofficeclientnet\OnlyOfficeDocumentClientNetCore\obj\Debug\net5.0\OnlyOfficeDocumentClientNetCore.genruntimeconfig.cache
 C:\myfiles\githubproject\onlyofficeclientnet\OnlyOfficeDocumentClientNetCore\bin\Debug\net5.0\SqlSugar.dll
+C:\myfiles\githubproject\onlyofficeclientnet\OnlyOfficeDocumentClientNetCore\bin\Debug\net5.0\Npgsql.dll
