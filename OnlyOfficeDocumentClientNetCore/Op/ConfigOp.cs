@@ -41,6 +41,27 @@ namespace OnlyOfficeDocumentClientNetCore.Op
             return FileInfomationDal.GetOne(fileId);
         }
 
+        public static bool InsertFileInfomation(string userId,string userName,string OldfileName,string  newFileName, string Id,  string filePath, int appId=1)
+        {
+            FileInfomation fileInfomation = new FileInfomation();
+            fileInfomation.appid = appId;
+            fileInfomation.createtime = DateTime.Now;
+            fileInfomation.createuserid = userId;
+            fileInfomation.createusername = userName;
+            fileInfomation.filepath = filePath;
+            fileInfomation.filestate = 0;
+            fileInfomation.id = Id;
+            fileInfomation.newfilename = newFileName;
+            fileInfomation.oldfilename = OldfileName;
+            fileInfomation.updatetime = fileInfomation.createtime;
+            fileInfomation.updateuserid = userId;
+            fileInfomation.updateusername = userName;
+
+         return   FileInfomationDal.Insert(fileInfomation);
+
+
+        }
+
         public static string GenerateRevisionId(string expectedKey)
         {
             if (expectedKey.Length > 20) expectedKey = expectedKey.GetHashCode().ToString();
@@ -54,12 +75,11 @@ namespace OnlyOfficeDocumentClientNetCore.Op
                                                        + "/" + File.GetLastWriteTime(Tools.StoragePath(fileName)).GetHashCode());
 
         }
-        public static OpResult GetDisplayPageConfig(string fileId,string  userId,string userName,bool canEdit,bool canDownload,string sign)
+        public static OpResult GetDisplayPageConfig(string fileId,string  userId,string userName,bool canEdit,bool canDownload)
         {
             OpResult result = new OpResult();
-
-            string str = "{\"type\": \"desktop\",\"documentType\": \"text\",\"document\": {	\"title\": \"说明.docx\",\"url\": \""+Tools.host+ "/getfile.ashx?fileid="+ fileId + "&sign="+sign+"\",	\"fileType\": \"docx\",	\"key\": \"1159266715\",	\"info\": {\"owner\": \"\",	\"uploaded\": \"2021-01-20 00:00:00\"	},\"permissions\": {	\"comment\": true,\"download\": false,\"edit\": true,	\"modifyFilter\": true,\"modifyContentControl\": true,	\"review\": true}},\"editorConfig\": {\"actionLink\": null,\"mode\": \"edit\",\"lang\": \"zh\",\"callbackUrl\": \"" + Tools.host + "/webeditor.ashx?type=track&fileid=53259a15dbb44deda722dd96dc774d87.docx\",\"user\": {	\"id\": \"123\",\"name\": \"yyy\"	},\"embedded\": {	\"saveUrl\": \"" + Tools.host + "/getfile.ashx?fileid=53259a15dbb44deda722dd96dc774d87.docx&sign=9D0BADAC80A902F151EC03EED736877505CEFA6536DEEC490749F3DDF6CCD708A69F7C4BFD688038A67581B2BCA886F4C8096B1CCCEADED0ECBAD25EF3EC6BA77C0118D8C5C90119C3EFA042059B6C0D9D46F71FDF9E072073DEE942270BB9266D32ADEAC3831CF7287E5B650CB91B73\",	\"embedUrl\": \"" + Tools.host + "/getfile.ashx?fileid=53259a15dbb44deda722dd96dc774d87.docx&sign=9D0BADAC80A902F151EC03EED736877505CEFA6536DEEC49606BCCFFB638CAD963AC929739789176561983F700FD392C845966D26EA74F32981FB89AD0E187756C1A80759118CDF6500F52B5637630FE3684842776C532AF6D35ABB335543C965544CCCC3530F1208CB5A40E2A522FCC\",	\"shareUrl\": \"" + Tools.host + "/getfile.ashx?fileid=53259a15dbb44deda722dd96dc774d87.docx&sign=9D0BADAC80A902F151EC03EED736877505CEFA6536DEEC49606BCCFFB638CAD963AC929739789176561983F700FD392C845966D26EA74F32981FB89AD0E187756C1A80759118CDF6500F52B5637630FE3684842776C532AF6D35ABB335543C965544CCCC3530F1208CB5A40E2A522FCC\",	\"toolbarDocked\": \"top\"},\"customization\": {	\"about\": true,	\"feedback\": true,\"goback\": {	\"url\": \"" + Tools.host + "/default.aspx\"}}} }";
-
+            
+   
             FileInfomation fileInfomation = FileInfomationDal.GetOne(fileId);
             string fileName = string.Empty;
             if (fileInfomation==null)
@@ -75,13 +95,16 @@ namespace OnlyOfficeDocumentClientNetCore.Op
             }
             var ext = Path.GetExtension(fileName);
 
-
+            Sign sg = new Sign();
+            sg.username = userName;
+            sg.userid = userId;
+            sg.dt = DateTime.Now;
 
             FileConfig fcg = new FileConfig();
             fcg.documentType = Tools.DocumentType(fileName);
             fcg.Type = "desktop";
             fcg.document.title = fileInfomation.oldfilename;
-            fcg.document.url = Tools.FileUri(fileName);
+            fcg.document.url = Tools.FileUri(fileName, sg);
             fcg.document.fileType = ext.Trim('.');
             fcg.document.key = Key(fileName);
             fcg.document.info.owner = fileInfomation.createusername;
@@ -99,9 +122,9 @@ namespace OnlyOfficeDocumentClientNetCore.Op
             fcg.editorConfig.user.id = userId;
             fcg.editorConfig.user.name = userName;
             fcg.editorConfig.embedded.toolbarDocked = "top";
-            fcg.editorConfig.embedded.saveUrl = Tools.FileUri(fileName);
-            fcg.editorConfig.embedded.embedUrl = Tools.FileUri(fileName);
-            fcg.editorConfig.embedded.shareUrl = Tools.FileUri(fileName);
+            fcg.editorConfig.embedded.saveUrl = Tools.FileUri(fileName, sg);
+            fcg.editorConfig.embedded.embedUrl = Tools.FileUri(fileName, sg);
+            fcg.editorConfig.embedded.shareUrl = Tools.FileUri(fileName, sg);
             fcg.editorConfig.customization.about = true;
             fcg.editorConfig.customization.feedback = true;
             fcg.editorConfig.customization.goback.Add("url", Tools.host + Tools.DefaultPage);

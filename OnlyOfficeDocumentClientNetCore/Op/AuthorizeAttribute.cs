@@ -2,15 +2,10 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Primitives;
 using OnlyOfficeDocumentClientNetCore.Common;
+using OnlyOfficeDocumentClientNetCore.Model;
 using System;
 using System.Linq;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
-using OnlyOfficeDocumentClientNetCore.Model;
 
 namespace OnlyOfficeDocumentClientNetCore.Op
 {
@@ -43,6 +38,7 @@ namespace OnlyOfficeDocumentClientNetCore.Op
             }
         }
     }
+
     /// <summary>
     /// documentsever 调用本服务的时候验证，只有验证通过，才可以执行下载文件，callback等操作
     /// </summary>
@@ -71,7 +67,7 @@ namespace OnlyOfficeDocumentClientNetCore.Op
                     {
                         try
                         {
-                            Model.Sign sg = Newtonsoft.Json.JsonConvert.DeserializeObject<Model.Sign>(Security.Decrypt( signstr));
+                            Model.Sign sg = Newtonsoft.Json.JsonConvert.DeserializeObject<Model.Sign>(Security.Decrypt(signstr));
                             if (sg != null && !string.IsNullOrEmpty(sg.username) && sg.dt.AddSeconds(10) < DateTime.Now)
                             {
                                 filterContext.Result = new UnauthorizedResult();
@@ -79,7 +75,7 @@ namespace OnlyOfficeDocumentClientNetCore.Op
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception("sign格式错误",ex);
+                            throw new Exception("sign格式错误", ex);
                         }
                     }
                 }

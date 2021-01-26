@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="script/jquery-1.9.0.min.js"></script>
+</head>
+<body>
+
+
+    <p>  <input type="file" id="uplfile" name="uplfile" /></p>
+    <p><input type="button" value="submit" name="uplfileBtn" id="uplfileBtn"></p>
+
+    <p><input type="button" value="callback" name="uplfileBtn2" id="uplfileBtn2"></p>
+    <script type="text/javascript">
+
+
+        $("#uplfileBtn").click(function () {
+            var files = $("#uplfile").prop('files');
+
+            var data = new FormData();
+            data.append('file', files[0]);  //参数名：file
+            data.append('userinfo', "asfddsf324324324");  //参数名：file
+            $.ajax({
+                url: "/api/file/UploadFile2?userid=555",
+                type: 'POST',
+                headers: { "Authorization": "asfsdfjlskdjfalksdjf" },
+                data: data,
+                cache: false, //禁止浏览器对该URL的缓存
+                contentType: false,
+                processData: false,
+                success: function () {
+                    //后续操作
+                }
+            });
+        });
+        $("#uplfileBtn2").click(function () {
+            var files = $("#uplfile").prop('files');
+
+            var data = new FormData();
+            data.append('file', files[0]);  //参数名：file
+            data.append('userinfo', "asfddsf324324324");  //参数名：file
+            $.ajax({
+                url: "/api/file/CallbackUrl?userid=555",
+                type: 'POST',
+                headers: { "Authorization": "asfsdfjlskdjfalksdjf" },
+                data: data,
+                cache: false, //禁止浏览器对该URL的缓存
+                contentType: false,
+                processData: false,
+                success: function () {
+                    //后续操作
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

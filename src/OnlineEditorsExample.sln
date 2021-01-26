@@ -5,7 +5,12 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineEditorsExample", "OnlineEditorsExample.csproj", "{3270EDBC-C0AB-4138-AE26-8A26D426D348}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlyOfficeDocumentClientNetCore", "..\OnlyOfficeDocumentClientNetCore\OnlyOfficeDocumentClientNetCore.csproj", "{1E6330EE-27B7-48B8-87E2-8160F4ECAE65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlyOfficeDocumentClientNetCore", "..\OnlyOfficeDocumentClientNetCore\OnlyOfficeDocumentClientNetCore.csproj", "{1E6330EE-27B7-48B8-87E2-8160F4ECAE65}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4148E3BE-2E09-4EE9-9FF1-22073DE8EED7}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

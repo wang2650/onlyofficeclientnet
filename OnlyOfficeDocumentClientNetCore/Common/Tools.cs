@@ -130,12 +130,17 @@ namespace OnlyOfficeDocumentClientNetCore.Common
         }
 
 
-        public static string FileUri(string id)
+        public static string FileUri(string id,Sign sign=null)
         {
-            Sign sg = new Sign();
-            sg.dt = DateTime.UtcNow;
+            if (sign==null)
+            {
+                sign = new Sign();
+                sign.dt = DateTime.UtcNow;
+
+            }
+       
         
-         return host+ GetFileUrl+ "?fileid="+id+"&sign=" + Security.Encrypt(Newtonsoft.Json.JsonConvert.SerializeObject(sg));
+         return host+ GetFileUrl+ "?fileid="+id+"&sign=" + Security.Encrypt(Newtonsoft.Json.JsonConvert.SerializeObject(sign));
          
         }
 

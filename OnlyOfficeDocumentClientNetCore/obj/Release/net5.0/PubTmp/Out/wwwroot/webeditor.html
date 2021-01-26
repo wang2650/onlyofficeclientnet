@@ -112,6 +112,17 @@
 
 
         var сonnectEditor = function () {
+           
+
+      
+        };
+
+        if (window.addEventListener) {
+            window.addEventListener("load", сonnectEditor);
+        } else if (window.attachEvent) {
+            window.attachEvent("load", сonnectEditor);
+        }
+        $(function () {
             $.ajax({
                 url: "http://192.168.26.22:8045/api/File/DisplayPageConfig",
                 type: 'get',
@@ -123,20 +134,11 @@
                     console.info(r.result);
                     config = r.result;
                     docEditor = new DocsAPI.DocEditor("iframeEditor", config);
-                   // console.info("config:"+config);
+                    // console.info("config:"+config);
                     //后续操作
                 }
             });
-
-      
-        };
-
-        if (window.addEventListener) {
-            window.addEventListener("load", сonnectEditor);
-        } else if (window.attachEvent) {
-            window.attachEvent("load", сonnectEditor);
-        }
-
+        }); 
     </script>
 </head>
 <body>

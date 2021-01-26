@@ -189,6 +189,7 @@
     <Content Include="App_Data\1.docx" />
     <Content Include="App_Data\2.xlsx" />
     <Content Include="App_Data\3.pptx" />
+    <Content Include=".editorconfig" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

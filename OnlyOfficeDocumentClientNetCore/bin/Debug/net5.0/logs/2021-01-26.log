@@ -1,0 +1,4 @@
+2021-01-26 12:13:03.9739|Microsoft.Extensions.Hosting.Internal.ConsoleLifetime.OnApplicationStarted                  |INFO|Application started. Press Ctrl+C to shut down. 
+2021-01-26 12:13:04.1658|Microsoft.Extensions.Hosting.Internal.ConsoleLifetime.OnApplicationStarted                  |INFO|Hosting environment: Development 
+2021-01-26 12:13:04.1993|Microsoft.Extensions.Hosting.Internal.ConsoleLifetime.OnApplicationStarted                  |INFO|Content root path: C:\myfiles\githubproject\onlyofficeclientnet\OnlyOfficeDocumentClientNetCore 
+2021-01-26 12:13:26.6582|OnlyOfficeDocumentClientNetCore.Controllers.FileController.CallbackUrl(C:\myfiles\githubproject\onlyofficeclientnet\OnlyOfficeDocumentClientNetCore\Controllers\FileController.cs:87)                  |INFO|asfddsfdsaf324234 
