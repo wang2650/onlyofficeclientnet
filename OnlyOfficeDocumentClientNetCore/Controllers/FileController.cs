@@ -203,7 +203,7 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
                 result.error = 1;
                 result.ErrorMessage = "数据错误";
             }
-          
+
             return Json(result);
         }
 
@@ -232,12 +232,12 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
                 }
                 else
                 {
-                    return new JsonResult(new { error = 1, ErrorMessage ="文件已被删除" });
+                    return new JsonResult(new { error = 1, ErrorMessage = "文件已被删除" });
                 }
             }
             catch (Exception ex)
             {
-                return new JsonResult(new { error = 1, ErrorMessage = ex.Message }); 
+                return new JsonResult(new { error = 1, ErrorMessage = ex.Message });
             }
         }
 
@@ -407,5 +407,47 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
         }
 
         #endregion 上传文件
+
+        [HttpPost]
+        [Route("CreateFile")]
+        public async Task<JsonResult> CreateFile(int templateId)
+        {
+            OpResult result = new OpResult();
+            string userId = "999";
+            string userName = "wxq";
+            string id = Guid.NewGuid().ToString("N");
+            string filePath = DateTime.Now.ToString(format: "yyyy-MM-dd");
+            if (templateId > 0 && templateId < 4)
+            {
+                switch (templateId)
+                {
+                    case 1:
+                        System.IO.File.Copy(Path.Combine(Common.Tools.VirtualPath + "template" + "/", templateId + ".docx"), Path.Combine(Common.Tools.VirtualPath + filePath + "/", id + ".docx"));
+
+                        break;
+
+                    case 2:
+                        System.IO.File.Copy(Path.Combine(Common.Tools.VirtualPath + "template" + "/", templateId + ".xlsx"), Path.Combine(Common.Tools.VirtualPath + filePath + "/", id + ".xlsx"));
+
+                        break;
+
+                    case 3:
+                        System.IO.File.Copy(Path.Combine(Common.Tools.VirtualPath + "template" + "/", templateId + ".pptx"), Path.Combine(Common.Tools.VirtualPath + filePath + "/", id + ".pptx"));
+
+                        break;
+
+                    default:
+                        break;
+                }
+                result.Result = new { FileId = id };
+            }
+            else
+            {
+                result.error = 1;
+                result.ErrorMessage = "无此模板";
+            }
+
+            return Json(result);
+        }
     }
 }
