@@ -12,7 +12,7 @@ namespace OnlyOfficeDocumentClientNetCore.Common
     {
 
         public static string DefaultPage = "/api/file/Error";
-        public static string EditPage = "/api/file/Edit";
+
         public static string GetFileUrl = "/api/file/GetFileByFileId";
         public static string callbackUrl = "/api/file/CallbackUrl";
 

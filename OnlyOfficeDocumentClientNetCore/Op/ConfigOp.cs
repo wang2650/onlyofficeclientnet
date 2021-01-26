@@ -145,9 +145,52 @@ namespace OnlyOfficeDocumentClientNetCore.Op
             return result;
         }
 
+        public static bool FileIsExist(string fileId)
+        {
+
+            return FileInfomationDal.FileIsExist(fileId);
+        }
+
+
+        /// <summary>
+        /// 删除  数据库记录状态改变 
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
+        public static bool DeleteForState(string fileId)
+        {
+
+            return FileInfomationDal.UpdateState(fileId);
+        }
+
+        public static bool Delete(string fileId)
+        {
+            bool result = false;
+            var rs = GetOne(fileId);
+
+            result = FileInfomationDal.Delete(fileId);
+            if (result)
+            {
+                try
+                {
+                    string filePath = Path.Combine(Common.Tools.VirtualPath + rs.filepath + "/", rs.newfilename);
+                    File.Delete(filePath);
+                    result= !File.Exists(filePath);
+                   
+                }
+                catch (Exception ex)
+                {
+                    
+                }
+            
+
+
+            }
+
+            return result;
+        }
 
 
 
-
-    }
+}
 }

@@ -27,9 +27,13 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
         public FileController(ILogger<FileController> logger)
         {
             _logger = logger;
-            _logger.LogDebug(1, "NLog injected into HomeController");
         }
 
+        /// <summary>
+        /// 获取文档编辑页面的js config配置
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("DisplayPageConfig")]
         public JsonResult DisplayPageConfig([FromForm] Model.InputPara.DisplayPageConfig model)
@@ -53,6 +57,10 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// 服务器回调 文件修改后，回调此页面。用来保存最新版本的文件。（原net例子有保存历史版本和修改记录，这里只保存最新的文件）
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [Route("CallbackUrl")]
         public JsonResult CallbackUrl()
@@ -166,19 +174,36 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// 错误页，当document服务器发生错误和脚本错误的时候，回跳转到此页面。
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("Error")]
         public JsonResult Error()
         {
             OpResult result = new OpResult();
+            result.error = 1;
+            result.ErrorMessage = "请确认参数是否错误，并保证文档服务器运行正常";
             return Json(result);
         }
 
         [HttpGet]
-        [Route("Edit")]
-        public JsonResult Edit()
+        [Route("FileIsExist")]
+        public JsonResult FileIsExist(string fileId)
         {
             OpResult result = new OpResult();
+            try
+            {
+                result.error = 0;
+                result.Result = ConfigOp.FileIsExist(fileId);
+            }
+            catch (Exception ex)
+            {
+                result.error = 1;
+                result.ErrorMessage = "数据错误";
+            }
+          
             return Json(result);
         }
 
@@ -188,19 +213,39 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
         {
             OpResult result = new OpResult();
 
-            var rs = ConfigOp.GetOne(fileId);
-            string directoryPath = rs.filepath;
-            string filePath = Tools.VirtualPath + "/" + directoryPath + "/" + rs.newfilename;
-            var memoryStream = new MemoryStream();
-            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 65536, FileOptions.Asynchronous | FileOptions.SequentialScan))
+            try
             {
-                await stream.CopyToAsync(memoryStream);
-            }
-            memoryStream.Seek(0, SeekOrigin.Begin);
+                var rs = ConfigOp.GetOne(fileId);
 
-            return File(memoryStream, "application/octet-stream", rs.oldfilename);
+                if (rs != null && rs.filestate != 2)
+                {
+                    string directoryPath = rs.filepath;
+                    string filePath = Tools.VirtualPath + "/" + directoryPath + "/" + rs.newfilename;
+                    var memoryStream = new MemoryStream();
+                    using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 65536, FileOptions.Asynchronous | FileOptions.SequentialScan))
+                    {
+                        await stream.CopyToAsync(memoryStream);
+                    }
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+
+                    return File(memoryStream, "application/octet-stream", rs.oldfilename);
+                }
+                else
+                {
+                    return new JsonResult(new { error = 1, ErrorMessage ="文件已被删除" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { error = 1, ErrorMessage = ex.Message }); 
+            }
         }
 
+        /// <summary>
+        /// 获取文件 document 服务器通过此接口获取要显示编辑的文件
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("GetFileByFileId")]
         public async Task<IActionResult> GetFileByFileId(string fileId)
@@ -243,18 +288,30 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// 删除文件
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("DeleteByFileId")]
-        public JsonResult DeleteByFileId([FromQuery] int userId)
+        public JsonResult DeleteByFileId([FromQuery] string fileId)
         {
             OpResult result = new OpResult();
+
+            result.error = ConfigOp.DeleteForState(fileId) ? 0 : 1;
+            result.ErrorMessage = result.error == 0 ? "" : "删除失败";
 
             return Json(result);
         }
 
+        #region 上传文件
+
         private async Task<OpResult> SaveUploadFileAsync()
         {
             OpResult result = new OpResult();
+            string userId = "999";
+            string userName = "wxq";
             string id = Guid.NewGuid().ToString("N");
             string newFileName = string.Empty;
             string oldFileName = string.Empty;
@@ -321,8 +378,6 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
 
             #endregion 保存文件
 
-            string userId = "999";
-            string userName = "wxq";
             try
             {
                 ConfigOp.InsertFileInfomation(userId, userName, oldFileName, newFileName, id, filePath, 1);
@@ -336,9 +391,13 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
             return result;
         }
 
+        /// <summary>
+        /// 上传文件
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
-        [Route("UploadFile2")]
-        public async Task<JsonResult> UploadHeadImage()
+        [Route("UploadFile")]
+        public async Task<JsonResult> UploadFile()
         {
             OpResult result = new OpResult();
 
@@ -346,5 +405,7 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
 
             return Json(result);
         }
+
+        #endregion 上传文件
     }
 }
