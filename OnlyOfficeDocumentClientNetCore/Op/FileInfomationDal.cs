@@ -35,9 +35,9 @@ namespace OnlyOfficeDocumentClientNetCore.Op
         /// </summary>
         /// <param name="fileId"></param>
         /// <returns></returns>
-        public static bool UpdateState(string fileId,int fileState=2)
+        public static bool UpdateState(string fileId,int userId,DateTime dt, int fileState=2)
         {
-            return DbClient.GetInstance().Updateable<FileInfomation>().SetColumns(f => f.filestate == fileState).Where(f => f.id == fileId.Trim()).ExecuteCommand() > 0;
+            return DbClient.GetInstance().Updateable<FileInfomation>().SetColumns(f => f.filestate == fileState).SetColumns(f=>f.updatetime==dt).SetColumns(f=>f.updateuserid==userId.ToString()).Where(f => f.id == fileId.Trim()).ExecuteCommand() > 0;
         }
         public static bool Delete(string fileId)
         {

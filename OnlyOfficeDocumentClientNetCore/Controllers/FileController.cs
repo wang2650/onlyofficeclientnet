@@ -29,36 +29,12 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// 获取文档编辑页面的js config配置
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("DisplayPageConfig")]
-        public JsonResult DisplayPageConfig([FromForm] Model.InputPara.DisplayPageConfig model)
-        {
-            OpResult result = new OpResult();
 
-            string userId = "1";
-            string userName = "songyan";
 
-            try
-            {
-                OnlyOfficeDocumentClientNetCore.Common.Tools.ConfigHost(this.Request);
-
-                result = ConfigOp.GetDisplayPageConfig(model.fileId, userId, userName, model.canEdit, model.canDownLoad);
-            }
-            catch (Exception ex)
-            {
-                result.error = 1;
-                result.ErrorMessage = ex.Message;
-            }
-            return Json(result);
-        }
+        #region  document server调用的接口
 
         /// <summary>
-        /// 服务器回调 文件修改后，回调此页面。用来保存最新版本的文件。（原net例子有保存历史版本和修改记录，这里只保存最新的文件）
+        /// (使用的document server的认证)服务器回调 文件修改后，回调此页面。用来保存最新版本的文件。（原net例子有保存历史版本和修改记录，这里只保存最新的文件）
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -175,7 +151,7 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
         }
 
         /// <summary>
-        /// 错误页，当document服务器发生错误和脚本错误的时候，回跳转到此页面。
+        /// 不需要认证 错误页，当document服务器发生错误和脚本错误的时候，回跳转到此页面。
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -188,6 +164,73 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// 获取文件 document 服务器通过此接口获取要显示编辑的文件
+        /// </summary>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetFileByFileId")]
+        [OnlyOfficeDocumentClientNetCore.Op.AuthorizeDocumentServer]
+        public async Task<IActionResult> GetFileByFileId(string fileId)
+        {
+            OpResult result = new OpResult();
+
+            if (fileId.Contains("."))
+            {
+                fileId = fileId.Substring(0, fileId.IndexOf("."));
+            }
+
+            var rs = ConfigOp.GetOne(fileId);
+            string directoryPath = rs.filepath;
+            string filePath = Tools.VirtualPath + "/" + directoryPath + "/" + rs.newfilename;
+            var memoryStream = new MemoryStream();
+            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 65536, FileOptions.Asynchronous | FileOptions.SequentialScan))
+            {
+                await stream.CopyToAsync(memoryStream);
+            }
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            return File(memoryStream, "application/octet-stream", rs.oldfilename);
+        }
+
+        #endregion
+
+
+        #region  客户端 调用的接口
+
+        /// <summary>
+        /// 获取文档编辑页面的js config配置
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [OnlyOfficeDocumentClientNetCore.Op.Authorize]
+        [Route("DisplayPageConfig")]
+        public JsonResult DisplayPageConfig([FromForm] Model.InputPara.DisplayPageConfig model)
+        {
+            OpResult result = new OpResult();
+
+            string userId = this.Request.HttpContext.User.Identity.Name;
+            string userName = "";
+
+            try
+            {
+                OnlyOfficeDocumentClientNetCore.Common.Tools.ConfigHost(this.Request);
+
+                result = ConfigOp.GetDisplayPageConfig(model.fileId, userId, userName, model.canEdit, model.canDownLoad);
+            }
+            catch (Exception ex)
+            {
+                result.error = 1;
+                result.ErrorMessage = ex.Message;
+            }
+            return Json(result);
+        }
+
+
+
+        [OnlyOfficeDocumentClientNetCore.Op.Authorize]
         [HttpGet]
         [Route("FileIsExist")]
         public JsonResult FileIsExist(string fileId)
@@ -206,13 +249,14 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
 
             return Json(result);
         }
-
+       
+        [OnlyOfficeDocumentClientNetCore.Op.Authorize]
         [HttpGet]
         [Route("DownloadFileByFileId")]
-        public async Task<IActionResult> DownloadFileByFileId(string fileId)
+        public async Task<IActionResult> DownloadFileByFileId()
         {
             OpResult result = new OpResult();
-
+            string fileId = this.Request.Query["fileId"].ToString();
             try
             {
                 var rs = ConfigOp.GetOne(fileId);
@@ -241,38 +285,11 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
             }
         }
 
-        /// <summary>
-        /// 获取文件 document 服务器通过此接口获取要显示编辑的文件
-        /// </summary>
-        /// <param name="fileId"></param>
-        /// <returns></returns>
+   
         [HttpGet]
-        [Route("GetFileByFileId")]
-        public async Task<IActionResult> GetFileByFileId(string fileId)
-        {
-            OpResult result = new OpResult();
-
-            if (fileId.Contains("."))
-            {
-                fileId = fileId.Substring(0, fileId.IndexOf("."));
-            }
-
-            var rs = ConfigOp.GetOne(fileId);
-            string directoryPath = rs.filepath;
-            string filePath = Tools.VirtualPath + "/" + directoryPath + "/" + rs.newfilename;
-            var memoryStream = new MemoryStream();
-            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 65536, FileOptions.Asynchronous | FileOptions.SequentialScan))
-            {
-                await stream.CopyToAsync(memoryStream);
-            }
-            memoryStream.Seek(0, SeekOrigin.Begin);
-
-            return File(memoryStream, "application/octet-stream", rs.oldfilename);
-        }
-
-        [HttpGet]
+        [OnlyOfficeDocumentClientNetCore.Op.Authorize]
         [Route("GetFileHistoryByFileId")]
-        public JsonResult GetFileHistoryByFileId([FromQuery] int userId)
+        public JsonResult GetFileHistoryByFileId()
         {
             OpResult result = new OpResult();
 
@@ -280,8 +297,9 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
         }
 
         [HttpGet]
+        [OnlyOfficeDocumentClientNetCore.Op.Authorize]
         [Route("GetFileHistoryDataByFileId")]
-        public JsonResult GetFileHistoryDataByFileId([FromQuery] int userId)
+        public JsonResult GetFileHistoryDataByFileId()
         {
             OpResult result = new OpResult();
 
@@ -295,11 +313,12 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("DeleteByFileId")]
+        [OnlyOfficeDocumentClientNetCore.Op.Authorize]
         public JsonResult DeleteByFileId([FromQuery] string fileId)
         {
             OpResult result = new OpResult();
 
-            result.error = ConfigOp.DeleteForState(fileId) ? 0 : 1;
+            result.error = ConfigOp.DeleteForState(fileId,Convert.ToInt32( this.Request.HttpContext.User.Identity.Name),DateTime.Now) ? 0 : 1;
             result.ErrorMessage = result.error == 0 ? "" : "删除失败";
 
             return Json(result);
@@ -310,12 +329,13 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
         private async Task<OpResult> SaveUploadFileAsync()
         {
             OpResult result = new OpResult();
-            string userId = "999";
-            string userName = "wxq";
+
+            string userId = this.Request.HttpContext.User.Identity.Name;
+      
             string id = Guid.NewGuid().ToString("N");
             string newFileName = string.Empty;
             string oldFileName = string.Empty;
-            string filePath = DateTime.Now.ToString(format: "yyyy-MM-dd");
+            string filePath = DateTime.Now.ToString(format: "yyyyMMdd");
 
             #region 保存文件
 
@@ -380,7 +400,7 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
 
             try
             {
-                ConfigOp.InsertFileInfomation(userId, userName, oldFileName, newFileName, id, filePath, 1);
+                ConfigOp.InsertFileInfomation(userId, "", oldFileName, newFileName, id, filePath, 1);
             }
             catch (Exception ex)
             {
@@ -396,6 +416,7 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
+        [OnlyOfficeDocumentClientNetCore.Op.Authorize]
         [Route("UploadFile")]
         public async Task<JsonResult> UploadFile()
         {
@@ -407,38 +428,41 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
         }
 
         #endregion 上传文件
-
+        [OnlyOfficeDocumentClientNetCore.Op.Authorize]
         [HttpPost]
         [Route("CreateFile")]
         public async Task<JsonResult> CreateFile(int templateId)
         {
             OpResult result = new OpResult();
-            string userId = "999";
-            string userName = "wxq";
+            string userId = this.Request.HttpContext.User.Identity.Name;
+         
             string id = Guid.NewGuid().ToString("N");
-            string filePath = DateTime.Now.ToString(format: "yyyy-MM-dd");
+            string filePath = DateTime.Now.ToString(format: "yyyyMMdd");
             if (templateId > 0 && templateId < 4)
             {
+                string extName = "";
+
                 switch (templateId)
                 {
                     case 1:
-                        System.IO.File.Copy(Path.Combine(Common.Tools.VirtualPath + "template" + "/", templateId + ".docx"), Path.Combine(Common.Tools.VirtualPath + filePath + "/", id + ".docx"));
-
+                           extName = ".docx";
                         break;
 
                     case 2:
-                        System.IO.File.Copy(Path.Combine(Common.Tools.VirtualPath + "template" + "/", templateId + ".xlsx"), Path.Combine(Common.Tools.VirtualPath + filePath + "/", id + ".xlsx"));
-
+                        extName = ".xlsx";
                         break;
 
                     case 3:
-                        System.IO.File.Copy(Path.Combine(Common.Tools.VirtualPath + "template" + "/", templateId + ".pptx"), Path.Combine(Common.Tools.VirtualPath + filePath + "/", id + ".pptx"));
-
+                        extName = ".pptx";
                         break;
 
                     default:
                         break;
                 }
+
+                System.IO.File.Copy(Path.Combine(Common.Tools.VirtualPath + "template" + "/", templateId + extName), Path.Combine(Common.Tools.VirtualPath + filePath + "/", id + extName));
+                result.error= ConfigOp.InsertFileInfomation(userId, "", "新文件", id + extName, id, filePath)?0:1;
+
                 result.Result = new { FileId = id };
             }
             else
@@ -449,5 +473,24 @@ namespace OnlyOfficeDocumentClientNetCore.Controllers
 
             return Json(result);
         }
+
+#endregion
+
+
+        [HttpGet]
+        [Route("test")]
+        public JsonResult test()
+        {
+            OpResult result = new OpResult();
+            TokenModelJWT model = new TokenModelJWT();
+            model.ExpDate = 8654;
+            model.Uid = 34534;
+
+            result.Result= JwtHelper.SerializeJWT(model);
+
+
+            return Json(result);
+        }
+
     }
 }

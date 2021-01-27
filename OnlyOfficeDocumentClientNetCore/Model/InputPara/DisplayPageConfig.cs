@@ -18,6 +18,6 @@ namespace OnlyOfficeDocumentClientNetCore.Model.InputPara
         /// <summary>
         /// 文件id
         /// </summary>
-        public string fileId { get; set; } ;
+        public string fileId { get; set; } 
     }
 }

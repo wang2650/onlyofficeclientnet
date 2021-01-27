@@ -35,6 +35,10 @@ namespace OnlyOfficeDocumentClientNetCore.Op
 
                     filterContext.HttpContext.User = principal;
                 }
+                else
+                {
+                    filterContext.Result = new UnauthorizedResult();
+                }
             }
         }
     }

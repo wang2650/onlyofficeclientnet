@@ -157,11 +157,14 @@ namespace OnlyOfficeDocumentClientNetCore.Op
         /// </summary>
         /// <param name="fileId"></param>
         /// <returns></returns>
-        public static bool DeleteForState(string fileId)
+        public static bool DeleteForState(string fileId,int userId,DateTime dt)
         {
 
-            return FileInfomationDal.UpdateState(fileId);
+            return FileInfomationDal.UpdateState(fileId,userId,dt);
         }
+
+
+
 
         public static bool Delete(string fileId)
         {
