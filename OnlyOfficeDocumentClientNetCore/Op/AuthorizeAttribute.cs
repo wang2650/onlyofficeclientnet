@@ -25,9 +25,9 @@ namespace OnlyOfficeDocumentClientNetCore.Op
             }
             else
             {
-                var jwtuserModel = JwtHelper.DerializeJWT(authStr.ToString());
+                var jwtuserModel =  JwtHelper.DerializeJWT(authStr.ToString());
 
-                if (jwtuserModel != null && jwtuserModel.ExpDate > new DateTimeOffset(DateTime.Now.AddHours(1)).ToUnixTimeSeconds())
+                if (jwtuserModel != null &&   jwtuserModel.LoginDateTime.AddSeconds(Convert.ToInt32( jwtuserModel.ExpDate))<DateTime.Now )
                 {
                     var identity = new CustomIdentity(jwtuserModel.Uid.ToString());
 
@@ -54,14 +54,18 @@ namespace OnlyOfficeDocumentClientNetCore.Op
         {
             if (filterContext == null)
                 throw new ArgumentNullException(nameof(filterContext));
+
+    
+
+
             if (!ConfigOp.GetwhiteIp().Contains(filterContext.HttpContext.Connection.RemoteIpAddress.ToString()))
             { filterContext.Result = new UnauthorizedResult(); }
             else
             {
                 var queryString = filterContext.HttpContext.Request.Query["sign"];
-                if (queryString.Count > 0 && string.IsNullOrEmpty(queryString.FirstOrDefault()))
+                if ( !string.IsNullOrEmpty(queryString.ToString()))
                 {
-                    string signstr = queryString[0];
+                    string signstr = queryString.ToString();
 
                     if (string.IsNullOrEmpty(signstr))
                     {

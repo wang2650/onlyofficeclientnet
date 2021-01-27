@@ -20,5 +20,8 @@ namespace OnlyOfficeDocumentClientNetCore.Model
         /// 过期时间
         /// </summary>
         public int? ExpDate { get; set; }
+
+
+        public DateTime LoginDateTime { get; set; }
     }
 }

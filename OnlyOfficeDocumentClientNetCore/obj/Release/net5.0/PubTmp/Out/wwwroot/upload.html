@@ -22,9 +22,9 @@
             data.append('file', files[0]);  //参数名：file
             data.append('userinfo', "asfddsf324324324");  //参数名：file
             $.ajax({
-                url: "/api/file/UploadFile2?userid=555",
+                url: "/api/file/UploadFile",
                 type: 'POST',
-                headers: { "Authorization": "asfsdfjlskdjfalksdjf" },
+                headers: { "Authorization": "A17A62BD20C9DE76E9C4605B669A6756EDB95791D95A703FB6D870B153BF2E7F7E573AEACCAC9FD50E991475D17C10F91A359305EE765F3D471CD87E33C4CB4E2B6C9C160604FD4370DB7E2869758F5492CC21E40D5883A528E8FD39F7ACF798678BFA4355E143C982F2202D66EF67385DCA53C37F815DE375371C0585D3D623CEEF12CE2D10EF90F5C6F59688224A71E2780CE0DD6CAD482A48C3F27B03C1B6" },
                 data: data,
                 cache: false, //禁止浏览器对该URL的缓存
                 contentType: false,
@@ -34,25 +34,7 @@
                 }
             });
         });
-        $("#uplfileBtn2").click(function () {
-            var files = $("#uplfile").prop('files');
 
-            var data = new FormData();
-            data.append('file', files[0]);  //参数名：file
-            data.append('userinfo', "asfddsf324324324");  //参数名：file
-            $.ajax({
-                url: "/api/file/CallbackUrl?userid=555",
-                type: 'POST',
-                headers: { "Authorization": "asfsdfjlskdjfalksdjf" },
-                data: data,
-                cache: false, //禁止浏览器对该URL的缓存
-                contentType: false,
-                processData: false,
-                success: function () {
-                    //后续操作
-                }
-            });
-        });
 
     </script>
 </body>

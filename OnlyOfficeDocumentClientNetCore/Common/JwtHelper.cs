@@ -69,7 +69,7 @@ namespace OnlyOfficeDocumentClientNetCore.Common
             JwtSecurityTokenHandler jwtHandler = new JwtSecurityTokenHandler();
             string encodedJwt = jwtHandler.WriteToken(jwt);
 
-            return encodedJwt;
+            return Security.Encrypt( encodedJwt);
         }
 
         /// <summary>
@@ -79,8 +79,10 @@ namespace OnlyOfficeDocumentClientNetCore.Common
         /// <returns></returns>
         public static TokenModelJWT DerializeJWT(string jwtStr)
         {
+
+
             JwtSecurityTokenHandler jwtHandler = new JwtSecurityTokenHandler();
-            JwtSecurityToken jwtToken = jwtHandler.ReadJwtToken(jwtStr);
+            JwtSecurityToken jwtToken = jwtHandler.ReadJwtToken(Security.Decrypt(    jwtStr));
 
             object role = new object(); ;
             try

@@ -123,13 +123,15 @@
             window.attachEvent("load", сonnectEditor);
         }
         $(function () {
+            var data = { 'fileId': "4f151c3bbaa94ae6982a81cc1ab10504", canEdit: true, canDownLoad:true}
+          
             $.ajax({
-                url: "http://192.168.26.22:8045/api/File/DisplayPageConfig",
+                url: "/api/File/DisplayPageConfig",
                 type: 'get',
-                // headers: { "Authorization": "asfsdfjlskdjfalksdjf" },
+                headers: { "Authorization": "A17A62BD20C9DE76E9C4605B669A6756EDB95791D95A703FB6D870B153BF2E7F7E573AEACCAC9FD50E991475D17C10F91A359305EE765F3D471CD87E33C4CB4E2B6C9C160604FD4370DB7E2869758F5492CC21E40D5883A528E8FD39F7ACF798678BFA4355E143C982F2202D66EF67385DCA53C37F815DE375371C0585D3D623CEEF12CE2D10EF90F5C6F59688224A71E2780CE0DD6CAD482A48C3F27B03C1B6" },
                 cache: false, //禁止浏览器对该URL的缓存
                 contentType: "application/json; charset=utf-8",
-                processData: false,
+                data:data,
                 success: function (r) {
                     console.info(r.result);
                     config = r.result;
